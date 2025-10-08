@@ -1,0 +1,15 @@
+{
+  "name": "identifix-scraper",
+  "version": "1.0.0",
+  "description": "Puppeteer automation for Identifix login",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": ["puppeteer", "automation", "scraper"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^21.0.0"
+  }
+}
