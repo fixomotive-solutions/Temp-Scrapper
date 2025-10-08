@@ -7,7 +7,7 @@ const PROCESSED_HANUMBERS_FILE = path.join(__dirname, 'processed_hanumbers.json'
 const PROCESSED_MODELS_FILE = path.join(__dirname, 'processed_models.json');
 
 // List of makes to process
-const MAKES_TO_PROCESS = ['Hyundai', 'Honda', 'Toyota', 'Skoda', 'Suzuki'];
+const MAKES_TO_PROCESS = ['Hyundai', 'Honda', 'Toyota', 'Skoda', 'Suzuki', 'Ford', 'Nissan', 'Chevrolet', 'Volvo'];
 const YEAR_TO_PROCESS = '2020';
 
 // Load processed HANumbers from file
