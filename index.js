@@ -73,17 +73,22 @@ async function loginToIdentifix() {
 
     try {
         const page = await browser.newPage();
+        
+        // Set default navigation timeout to 90 seconds
+        page.setDefaultNavigationTimeout(90000);
+        page.setDefaultTimeout(90000);
 
         console.log('Navigating to Identifix login page...');
         await page.goto('https://dh.identifix.com/Default/LogOnIdentifix', {
-            waitUntil: 'networkidle2'
+            waitUntil: 'networkidle2',
+            timeout: 90000
         });
 
         console.log('Page loaded. Waiting for login form...');
 
         await page.waitForSelector('input[name="UserName"], input[type="text"], #UserName', {
             visible: true,
-            timeout: 10000
+            timeout: 30000
         });
 
         console.log('Filling in username...');
@@ -102,7 +107,7 @@ async function loginToIdentifix() {
         console.log('Waiting for navigation after login...');
         await page.waitForNavigation({
             waitUntil: 'networkidle2',
-            timeout: 15000
+            timeout: 60000
         }).catch(() => {
             console.log('Navigation timeout - checking if login was successful...');
         });
@@ -111,7 +116,7 @@ async function loginToIdentifix() {
         console.log('Current URL after login attempt:', currentUrl);
         console.log('Login successful! Now proceeding to vehicle selection...');
 
-        await page.waitForSelector('#ddlVehicleYear', { visible: true, timeout: 10000 });
+        await page.waitForSelector('#ddlVehicleYear', { visible: true, timeout: 30000 });
         console.log('Vehicle selection page loaded.');
 
         // Loop through all makes
@@ -186,7 +191,7 @@ async function loginToIdentifix() {
 
                     await page.waitForTimeout(2000);
 
-                    await page.waitForSelector('.tab-link-list a');
+                    await page.waitForSelector('.tab-link-list a', { timeout: 30000 });
 
                     console.log('  Clicking Hotline Archives link...');
                     await page.evaluate(() => {
@@ -222,7 +227,11 @@ async function loginToIdentifix() {
                             console.log(`    URL ${k + 1}: No HANumber found in URL`);
                         }
 
-                        await page.goto(url, { waitUntil: 'networkidle2' });
+                        // Increased timeout for individual page navigation
+                        await page.goto(url, { 
+                            waitUntil: 'networkidle2',
+                            timeout: 90000
+                        });
                         await page.waitForTimeout(5000);
 
                         const data = await page.evaluate(() => {
@@ -273,8 +282,11 @@ async function loginToIdentifix() {
                     await saveProcessedModels(processedModels);
                     console.log(`  ✅ Marked as processed: ${YEAR_TO_PROCESS} ${make} ${modelText} ${engineText}`);
 
-                    // Navigate back to vehicle selection
-                    await page.goto('https://dh.identifix.com/CreateVehicle/Index?LocationId=13', { waitUntil: 'networkidle2' });
+                    // Navigate back to vehicle selection with increased timeout
+                    await page.goto('https://dh.identifix.com/CreateVehicle/Index?LocationId=13', { 
+                        waitUntil: 'networkidle2',
+                        timeout: 90000
+                    });
 
                     console.log('  Waiting 20 seconds before next selection...');
                     await page.waitForTimeout(20000);
